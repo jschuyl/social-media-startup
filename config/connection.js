@@ -1,6 +1,8 @@
 const { connect, connection } = require('mongoose');
 
-connect('mongodb://localhost/socialMedia', {
+const letMeIn = process.env.MONGODB_URI || 'mongodb://localhost:27017/socialMedia';
+
+connect(letMeIn, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
