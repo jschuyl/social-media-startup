@@ -1,5 +1,4 @@
-const User = require('../models/User'); // I can't do the { model, model } thing for whatever reason, so I have to require each manually
-const Thought = require('../models/Thought');
+const User = require('../models/User');
 
 module.exports ={
     getUsers(req,res) {
@@ -27,7 +26,36 @@ module.exports ={
         User.create(req.body)
           .then((user) => res.json(user))
           .catch((err) => res.status(500).json(err));
+    },
+    updateUser(req,res) {
+        User.findByIdAndUpdate(
+            { _id: req.params.userId },
+            { $set: req.body}
+            )
+            .then((user) => {
+                !user
+                 ? res.status(404).json({ message: "No sign of life 'ere Cap'n"})
+                 : res.status(200).json({
+                    user
+                 })
+            })
+            .catch((err) => {
+                res.status(500).json(err)
+            })
       },
+    deleteUser(req,res) {
+        User.deleteOne(
+            { _id: req.params.userId }
+        )
+        .then((user) => {
+            !user
+             ? res.status(404).json({ message: "Can't delete what never existed Cap'n" })
+             : res.status(200).json({ message: "She's gone Cap'n" })
+        })
+        .catch((err) => {
+            res.status(500).json(err)
+        })
+    },
     sayHello(req, res) {
         return res.send('Helloooo')
     }
