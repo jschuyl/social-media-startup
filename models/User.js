@@ -9,13 +9,27 @@ const userSchema = new Schema ({
         email: {
             type: String,
             required: true,
-        },  
+        },
+        thoughts: [{
+            type: Schema.Types.ObjectId,
+            ref: 'Thought'
+        }],
+        friends: [{
+            type: Schema.Types.ObjectId,
+            ref: 'User'
+        }]  
     },
     {
         toJSON: {
-            getters: true
+            getters: true,
+            virtuals: true
         }
-    })
+    }
+);
+
+userSchema.virtual('totalFriends').get(() => {
+    return this.friends.length;
+});
 
 const User = model('user', userSchema)
 
