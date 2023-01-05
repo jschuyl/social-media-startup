@@ -34,7 +34,7 @@ module.exports ={
             )
             .then((user) => {
                 !user
-                 ? res.status(404).json({ message: "No sign of life 'ere Cap'n"})
+                 ? res.status(404).json({ message: "I can't update what isn't there"})
                  : res.status(200).json({
                     user
                  })
