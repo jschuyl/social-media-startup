@@ -6,7 +6,9 @@ const {
     getOneUser,
     updateUser,
     sayHello,
-    deleteUser
+    deleteUser,
+    createFriend,
+    deleteFriend
 } = require('../../controllers/userController')
 
 router
@@ -19,6 +21,11 @@ router
     .get(getOneUser)
     .put(updateUser)
     .delete(deleteUser)
+
+router
+    .route('/:userId/friends/:friendId')
+    .post(createFriend)
+    .delete(deleteFriend);
 
 router.route('/hello').get(sayHello);
 

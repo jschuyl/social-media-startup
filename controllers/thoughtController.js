@@ -6,7 +6,7 @@ module.exports ={
         Thought.create(req.body)
             .then((thought) => {
                 return User.findOneAndUpdate(
-                    { _id: req.body.userId },
+                    { username: req.body.username },
                     { $addToSet: {thoughts: thought._id} },
                     {new: true}
                 )
@@ -64,6 +64,37 @@ module.exports ={
         .catch((err) => {
             res.status(500).json(err)
         })
+    },
+    createReaction(req, res) {
+        Thought.findOneAndUpdate(
+            {_id: req.params.thoughtId},
+            {$addToSet: {reactions: req.body}},
+        )
+            .then((thought) => {
+
+                !thought
+                ? res.status(404).json({ message: "I can't react to nothing, not on this site at least"})
+                : res.status(200).json({ thought, message: "you reacted, congrats"})
+            })
+            .catch((err) => {
+                res.status(500).json(err)
+            })
+    },
+    deleteReaction(req, res) {
+        Thought.findOneAndUpdate(
+            {_id: req.params.thoughtId},
+            {$pull: {reactions: { reactionId: req.params.reactionId }}},
+        )
+            .then((thought) => {
+
+                !thought
+                ? res.status(404).json({ message: "You don't need to d this, nothing is there"})
+                : res.status(200).json({ thought, message: "You unreacted, congrats"})
+            })
+            .catch((err) => {
+                res.status(500).json(err)
+            })
+
     },
     sayHello(req, res) {
         return res.send('Helloooo')

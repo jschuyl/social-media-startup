@@ -8,6 +8,7 @@ module.exports ={
                 res.status(200).json(user)
             )
             .catch((err)=> 
+            
                 res.status(500).json(err)
             )
     },
@@ -22,7 +23,7 @@ module.exports ={
                  })
             )
     },
-    createUser(req, res) {
+    createUser(req, res ) {
         User.create(req.body)
           .then((user) => res.json(user))
           .catch((err) => res.status(500).json(err));
@@ -55,6 +56,32 @@ module.exports ={
         .catch((err) => {
             res.status(500).json(err)
         })
+    },
+    createFriend(req, res){
+        User.findOneAndUpdate(
+            {_id: req.params.userId},
+            { $addToSet: {friends: req.params.friendId}},
+            { runValidators: true, new: true}
+        )
+        .then((user) =>{
+            !user
+            ? res.status(404).json({message: "No friend here"})
+            : res.status(200).json(user)
+        })
+        .catch((err) => res.status(500).json(err))
+    },
+    deleteFriend(req,res){
+        User.findOneAndUpdate(
+            {_id: req.params.userId},
+            { $pull: {friends: req.params.friendId}},
+            { new: true}
+        )
+        .then((user)=>{
+            !user
+            ? res.status(404).json({message: "Can't get rid of friends you don't have"})
+            : res.status(200).json(user)
+        })
+        .catch((err)=>res.status(500).json(err))
     },
     sayHello(req, res) {
         return res.send('Helloooo')
