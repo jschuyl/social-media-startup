@@ -20,7 +20,7 @@ module.exports ={
     },
     updateThought(req, res){
         Thought.findOneAndUpdate(
-            { _id: req.params.userId },
+            { _id: req.params.thoughtId },
             { $set: req.body}
             )
             .then((thought) => {
@@ -52,7 +52,7 @@ module.exports ={
                  })
             )
     },
-    deleteThought(red, res) {
+    deleteThought(req, res) {
         Thought.deleteOne(
             { _id: req.params.thoughtId }
         )
